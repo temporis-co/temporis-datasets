@@ -48,3 +48,28 @@ on. Rules:
    one text.
 3. No event means `events == []` and `positions == []`, never a placeholder
    such as `"none"`.
+
+## Preparing a dataset
+
+```
+time series ─▶ fill gaps ─▶ cut patches ─▶ cut examples ─▶ serialize ─▶ split
+```
+
+1. **Time series.** Take each series as the source measures it, on its own
+   fixed interval, the **grid**: one value per **time step**.
+2. **Fill gaps.** Fill short gaps with the last value before them; leave long
+   gaps empty, and build no example across them.
+3. **Cut patches.** Cut each series into **patches** of `patch_len` time
+   steps. Series that belong together, such as the vitals of one patient,
+   are cut together and form one multivariate time series.
+4. **Cut examples.** Cut **examples** of `num_patches` consecutive patches,
+   starting every `stride` patches.
+5. **Serialize.** Encode each example as text with
+   `tstokenizers.Serializer(quantiles, patch_len, quant_scale)`, which
+   normalizes and clips each series by the quantiles given.
+6. **Split.** Choose a **cut** in time. Examples that end on or before it are
+   train, examples that start on or after it are test.
+
+A dataset with events adds one step: for each example, list the events that
+fall inside it, each as a short text and the position of the patch boundary
+where it takes effect.
