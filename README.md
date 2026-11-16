@@ -4,10 +4,9 @@ A standard for preparing time series datasets for Temporis.
 
 ## Format
 
-A dataset is a Hugging Face `DatasetDict` with two splits, `train` and
-`test`. Every row is one **example**: a fixed length of one or more time
-series, serialized as text with
-[tstokenizers](https://github.com/temporis-ai/tstokenizers).
+A Hugging Face `DatasetDict` with two splits, `train` and `test`. Every row
+is one **example**: a fixed length of one or more time series, serialized as
+text with [tstokenizers](https://github.com/temporis-ai/tstokenizers).
 
 | column           | type     | meaning                                                                               |
 |------------------|----------|---------------------------------------------------------------------------------------|
@@ -17,9 +16,8 @@ series, serialized as text with
 Rules:
 
 1. `len(serialized)` is an exact multiple of `patch_text_len`.
-2. Train and test do not overlap: a test example never shares a time step of a
-   series with a train example.
-3. No other columns.
+2. The time range covered by the test examples does not overlap the time
+   range covered by the train examples.
 
 ### Events
 
