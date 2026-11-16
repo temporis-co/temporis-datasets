@@ -28,7 +28,8 @@ A dataset whose series are affected by known events adds two columns:
 | `events`    | `list[string]` | Event texts in time order. Empty when nothing happened in the example.                         |
 | `positions` | `list[int]`    | Where each event sits: the number of patches before it. `positions[i]` belongs to `events[i]`. |
 
-An example row, 6 patches of 80 characters:
+An example row, 6 patches of 80 characters. Its event sits between patch 4
+and patch 5, so it is seen from the last patch on:
 
 ```python
 {'serialized': '967>+=34.)0 /80-/40 /=0%/;0 /?0"/=0 /?0!...',   # 480 characters
@@ -37,8 +38,7 @@ An example row, 6 patches of 80 characters:
  'positions': [5]}
 ```
 
-The event sits between patch 4 and patch 5, so it is seen from the last patch
-on. Rules:
+Rules:
 
 1. `len(events) == len(positions)`.
 2. `0 <= position < number of patches`. Positions are strictly increasing:
